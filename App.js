@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView, FlatList, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
+import React, { useState } from 'react';
+import GoalItem from './components/GoalItem';
+import GoalInput from './components/GoalInput';
+import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 
 function Item({ title }) {
   return (
@@ -11,33 +13,22 @@ function Item({ title }) {
 }
 
 export default function App() {
-  const [goal, setGoal] = useState('');
   const [goalList, setGoalList] = useState([]);
 
-  const goalListHandler = () => {
+  const goalListHandler = (goal, setGoal) => {
     setGoal('');
     setGoalList(goalList => [...goalList, { key: Math.random().toString(), value: goal }])
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <TextInput
-          value={goal}
-          autoFocus={true}
-          style={styles.input}
-          onChangeText={setGoal}
-          placeholder="Course Goal"
-        />
-
-        <Button title="Add Goal" onPress={goalListHandler} />
-      </View>
+      <GoalInput onAddGoal={goalListHandler} />
 
       <FlatList
         data={goalList}
         style={styles.list}
         keyExtractor={item => item.key}
-        renderItem={({ item }) => <Item title={item.value} />}
+        renderItem={({ item }) => <GoalItem item={item} />}
       />
     </SafeAreaView>
   );
@@ -49,24 +40,7 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: Constants.statusBarHeight,
   },
-  title: {
-    fontSize: 14,
-    color: 'white',
-  },
-  input: {
-    padding: 10,
-    width: '100%',
-    borderWidth: 1,
-    borderRadius: 4,
-    marginBottom: 10,
-    borderColor: 'dodgerblue',
-  },
   list: {
     marginVertical: 10,
   },
-  item: {
-    padding: 10,
-    marginVertical: 4,
-    backgroundColor: 'teal',
-  }
 });
