@@ -15,9 +15,17 @@ function Item({ title }) {
 export default function App() {
   const [goalList, setGoalList] = useState([]);
 
-  const goalListHandler = (goal, setGoal) => {
+  const goalListHandler = (goal = goal.trim(), setGoal) => {
     setGoal('');
-    setGoalList(goalList => [...goalList, { key: Math.random().toString(), value: goal }])
+    if (goal) {
+      setGoalList(goalList => [...goalList, { key: Math.random().toString(), value: goal }])
+    }
+  };
+
+  const deleteItem = (goal) => {
+    setGoalList(currentList => {
+      return currentList.filter(item => item.key !== goal.key);
+    });
   };
 
   return (
@@ -28,7 +36,7 @@ export default function App() {
         data={goalList}
         style={styles.list}
         keyExtractor={item => item.key}
-        renderItem={({ item }) => <GoalItem item={item} />}
+        renderItem={({ item }) => <GoalItem deleteItem={deleteItem} item={item} />}
       />
     </SafeAreaView>
   );
