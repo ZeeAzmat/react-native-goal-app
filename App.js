@@ -12,39 +12,32 @@ function Item({ title }) {
 
 export default function App() {
   const [goal, setGoal] = useState('');
-  const [goalList, setGoalList] = useState([
-    {
-      key: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      value: 'First Item',
-    },
-    {
-      key: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      value: 'Second Item',
-    },
-    {
-      key: '58694a0f-3da1-471f-bd96-145571e29d72',
-      value: 'Third Item',
-    }
-  ]);
+  const [goalList, setGoalList] = useState([]);
 
   const goalListHandler = () => {
-    // setGoalList(goalList => [...goalList, goal])
+    setGoal('');
     setGoalList(goalList => [...goalList, { key: Math.random().toString(), value: goal }])
-    // console.log('\n\ngoalList: ', JSON.stringify(goalList));
-  }
-
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
-        <TextInput placeholder="Course Goal" style={styles.input} onChangeText={setGoal} value={goal} />
+      <View>
+        <TextInput
+          value={goal}
+          autoFocus={true}
+          style={styles.input}
+          onChangeText={setGoal}
+          placeholder="Course Goal"
+        />
+
         <Button title="Add Goal" onPress={goalListHandler} />
       </View>
 
       <FlatList
         data={goalList}
-        renderItem={({ item }) => <Item title={item.value} />}
+        style={styles.list}
         keyExtractor={item => item.key}
+        renderItem={({ item }) => <Item title={item.value} />}
       />
     </SafeAreaView>
   );
@@ -53,15 +46,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 20,
     marginTop: Constants.statusBarHeight,
   },
-  item: {
-    margin: 8,
-    padding: 10,
-    backgroundColor: 'teal',
-  },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'white',
   },
   input: {
@@ -72,10 +61,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: 'dodgerblue',
   },
-  listItem: {
-    margin: 5,
+  list: {
+    marginVertical: 10,
+  },
+  item: {
     padding: 10,
-    backgroundColor: 'dodgerblue',
-    // borderColor: ''
+    marginVertical: 4,
+    backgroundColor: 'teal',
   }
 });
