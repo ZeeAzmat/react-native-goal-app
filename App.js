@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import React, { useState } from 'react';
 import GoalItem from './components/GoalItem';
 import GoalInput from './components/GoalInput';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Button } from 'react-native';
 
 function Item({ title }) {
   return (
@@ -14,13 +14,19 @@ function Item({ title }) {
 
 export default function App() {
   const [goalList, setGoalList] = useState([]);
+  const [isGoalModal, setIsGoalModal] = useState(false);
 
   const goalListHandler = (goal = goal.trim(), setGoal) => {
     setGoal('');
+
     if (goal) {
       setGoalList(goalList => [...goalList, { key: Math.random().toString(), value: goal }])
     }
   };
+
+  const closeModal = () => {
+    setIsGoalModal(false);
+  }
 
   const deleteItem = (goal) => {
     setGoalList(currentList => {
@@ -30,7 +36,8 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <GoalInput onAddGoal={goalListHandler} />
+      <Button title="Add New Goal" onPress={() => setIsGoalModal(true)} />
+      <GoalInput visible={isGoalModal} closeModal={closeModal} onAddGoal={goalListHandler} />
 
       <FlatList
         data={goalList}
